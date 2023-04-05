@@ -57,13 +57,11 @@ app.post("/login", async (req, res) => {
       {},
       (err, token) => {
         if (err) throw err;
-        res
-          .cookie("token", token, { sameSite: "none", secure: true })
-          .json({
-            id: userDoc._id,
-            firstName: userDoc.firstName,
-            typeOfUser: userDoc.typeOfUser,
-          });
+        res.cookie("token", token, { sameSite: "none", secure: true }).json({
+          id: userDoc._id,
+          firstName: userDoc.firstName,
+          typeOfUser: userDoc.typeOfUser,
+        });
       }
     );
   } else {

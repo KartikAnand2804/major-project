@@ -1,9 +1,10 @@
 import React from "react";
 
-function Pricing() {
+function Pricing(props) {
+  const distance = props.distance;
   return (
     <div>
-      <h1>This is the pricing</h1>
+      <h1>{distance}</h1>
     </div>
   );
 }
