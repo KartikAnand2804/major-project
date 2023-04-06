@@ -2,10 +2,14 @@ import React, { useContext, useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import { WalletContext } from "../context/WalletContext";
+
 import axios from "axios";
 
 function Header() {
   const { userInfo, setUserInfo } = useContext(UserContext);
+  const { setWalletConnected } = useContext(WalletContext);
+
   useEffect(() => {
     try {
       axios
@@ -42,6 +46,7 @@ function Header() {
         .request({ method: "eth_requestAccounts" })
         .then((result) => {
           setwalletConnectButtonText(result[0]);
+          setWalletConnected(true);
         });
     } else {
       setWalletConnectError("Install Metamask.");
@@ -52,9 +57,9 @@ function Header() {
   return (
     <nav class="bg-white px-2 sm:px-4 py-2.5  fixed w-full z-20 top-0 left-0 border-b border-gray-200 ">
       <div class="container flex flex-wrap items-center justify-between mx-auto">
-        <a href="https://flowbite.com/" class="flex items-center">
-          <span class="self-center text-xl font-tilt font-semibold whitespace-nowrap ">
-            <img src="src/assets/logo.svg" alt="logo" className="w-6 h-6" />
+        <a href="/" class="flex items-center">
+          <span class="self-center text-xl font-bold whitespace-nowrap ">
+            {/* <img src="src/assets/logo.svg" alt="logo" className="w-6 h-6" /> */}
             <h1>BLOCK-RIDE</h1>
           </span>
         </a>

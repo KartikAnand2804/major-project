@@ -50,8 +50,8 @@ function Home() {
       `https://api.distancematrix.ai/maps/api/distancematrix/json?origins=${location}&destinations=${destination}&key=${accessToken}`
     );
     const data = response.data;
-    const distance = data.rows[0].elements[0].distance.text;
-    setDistance(distance);
+    const distance = data.rows[0].elements[0].distance.value;
+    setDistance(distance / 1000);
   }
 
   return (
