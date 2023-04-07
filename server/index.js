@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const User = require("./models/User");
+const Ride = require("./models/Ride");
 const bcrypt = require("bcrypt");
 const app = express();
 const jwt = require("jsonwebtoken");
@@ -34,6 +35,23 @@ app.post("/register", async (req, res) => {
     });
     console.log(userDoc);
     res.json(userDoc);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
+});
+
+app.post("/book-ride", async (req, res) => {
+  const { price, tier, from, to, riderWalletId } = req.body;
+  try {
+    const rideDoc = await Ride.create({
+      from,
+      to,
+      price,
+      riderWalletId,
+      tier,
+    });
+    res.json(rideDoc);
   } catch (error) {
     console.log(error);
     res.status(400).json(error);

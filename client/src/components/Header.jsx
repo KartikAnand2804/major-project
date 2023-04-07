@@ -8,7 +8,8 @@ import axios from "axios";
 
 function Header() {
   const { userInfo, setUserInfo } = useContext(UserContext);
-  const { setWalletConnected } = useContext(WalletContext);
+  const { setWalletConnected, setWalletId, walletId } =
+    useContext(WalletContext);
 
   useEffect(() => {
     try {
@@ -33,10 +34,6 @@ function Header() {
     setUserInfo(null);
   }
 
-  const [walletConnectButtonText, setwalletConnectButtonText] = useState(
-    "Connect your wallet"
-  );
-
   const [walletConnectError, setWalletConnectError] = useState("");
 
   function connectWallet() {
@@ -45,12 +42,12 @@ function Header() {
       window.ethereum
         .request({ method: "eth_requestAccounts" })
         .then((result) => {
-          setwalletConnectButtonText(result[0]);
+          setWalletId(result[0]);
           setWalletConnected(true);
         });
     } else {
       setWalletConnectError("Install Metamask.");
-      setwalletConnectButtonText(walletConnectError);
+      alert(walletConnectError);
     }
   }
 
@@ -68,7 +65,11 @@ function Header() {
             <div className="flex gap-4 items-center ">
               <img
                 alt="driver"
-                src="src/assets/driver.svg"
+                src={
+                  userInfo.typeOfUser === "driver"
+                    ? "src/assets/driver.svg"
+                    : "src/assets/rider.svg"
+                }
                 className="h-6 w-6"
               />
               <button
@@ -133,7 +134,7 @@ function Header() {
               alt="connect your metamask wallet"
               className="w-4 h-4"
             />
-            {walletConnectButtonText}
+            {walletId ? walletId : "Connect your wallet."}
           </button>
           <ul class="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white ">
             <li></li>

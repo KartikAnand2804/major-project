@@ -18,6 +18,7 @@ export default function RenderMap(props) {
         center={locationCoordinates}
         zoom={9}
         scrollWheelZoom={true}
+        bounds={(locationCoordinates, destinationCoordinates)}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

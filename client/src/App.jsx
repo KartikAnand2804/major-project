@@ -5,19 +5,22 @@ import Register from "./components/Register";
 import Home from "./components/Home";
 import UserContextProvider from "./context/UserContext";
 import WalletContextProvider from "./context/WalletContext";
+import RideContextProvider from "./context/RideContext";
 
 function App() {
   return (
     <UserContextProvider>
       <WalletContextProvider>
-        <BrowserRouter>
-          <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </BrowserRouter>
+        <RideContextProvider>
+          <BrowserRouter>
+            <Header />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Routes>
+          </BrowserRouter>
+        </RideContextProvider>
       </WalletContextProvider>
     </UserContextProvider>
   );

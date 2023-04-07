@@ -1,14 +1,16 @@
 import React, { useState, useContext } from "react";
+import axios from "axios";
 import { WalletContext } from "../context/WalletContext";
+import { RideContext } from "../context/RideContext";
 
 function Pricing(props) {
   const [ride, setRide] = useState("");
   const distance = props.distance;
   const basePrice = 1572;
   const eth_logo = "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=024";
+  const [finalPrice, setFinalPrice] = useState(null);
 
-  const { walletConnected } = useContext(WalletContext);
-  console.log(walletConnected);
+  const { walletConnected, walletId } = useContext(WalletContext);
 
   const cabs = {
     luxury: {
@@ -30,7 +32,23 @@ function Pricing(props) {
     },
   };
 
-  function bookRide() {}
+  const { loc, dest } = useContext(RideContext);
+  const rideData = {
+    tier: ride,
+    from: loc,
+    to: dest,
+    riderWalletId: walletId,
+    price: finalPrice,
+  };
+
+  async function bookRide() {
+    const response = await axios.post(
+      "http://localhost:5000/book-ride",
+      rideData
+    );
+    const data = response.data;
+    console.log(data);
+  }
   return (
     <div className="p-6">
       <h1 className="text-2xl text-center font-bold">Pick your ride.</h1>
@@ -39,6 +57,9 @@ function Pricing(props) {
           className="flex border hover:border-black focus:border-black focus:bg-black focus:text-white p-4 mb-3 w-full"
           onClick={() => {
             setRide("luxury");
+            setFinalPrice(
+              ((basePrice / 10 ** 5) * cabs.luxury.multiplier).toFixed(5)
+            );
           }}
         >
           <div className="items-center">
@@ -55,7 +76,7 @@ function Pricing(props) {
           </div>
           <div className="flex items-center gap-6">
             <img src={eth_logo} alt="eth-logo" className="h-10 w-8" />
-            <h3>
+            <h3 className="text-xl font-bold">
               {((basePrice / 10 ** 5) * cabs.luxury.multiplier).toFixed(5)}
             </h3>
           </div>
@@ -67,6 +88,9 @@ function Pricing(props) {
           className="flex border hover:border-black focus:border-black focus:bg-black focus:text-white p-4 mb-3 w-full"
           onClick={() => {
             setRide("basic");
+            setFinalPrice(
+              ((basePrice / 10 ** 5) * cabs.basic.multiplier).toFixed(5)
+            );
           }}
         >
           <div className="items-center">
@@ -83,7 +107,7 @@ function Pricing(props) {
           </div>
           <div className="flex items-center gap-6 justify-end">
             <img src={eth_logo} alt="eth-logo" className="h-10 w-8" />
-            <h3>
+            <h3 className="text-xl font-bold">
               {((basePrice / 10 ** 5) * cabs.basic.multiplier).toFixed(5)}
             </h3>
           </div>
@@ -95,6 +119,9 @@ function Pricing(props) {
           className="flex border hover:border-black focus:border-black focus:bg-black focus:text-white p-4 mb-3 w-full "
           onClick={() => {
             setRide("economy");
+            setFinalPrice(
+              ((basePrice / 10 ** 5) * cabs.economy.multiplier).toFixed(5)
+            );
           }}
         >
           <div className="items-center">
@@ -111,7 +138,7 @@ function Pricing(props) {
           </div>
           <div className="flex items-center gap-6">
             <img src={eth_logo} alt="eth-logo" className="h-10 w-8" />
-            <h3>
+            <h3 className="text-xl font-bold">
               {((basePrice / 10 ** 5) * cabs.economy.multiplier).toFixed(5)}
             </h3>
           </div>
@@ -120,10 +147,14 @@ function Pricing(props) {
 
       <button
         className="w-full border-black bg-black text-white p-6 disabled:bg-gray-400"
-        disabled={walletConnected ? false : true}
+        disabled={walletConnected ? (ride === "" ? true : false) : true}
         onClick={bookRide}
       >
-        {walletConnected ? "Book Ride" : "Connect your wallet to book ride."}
+        {walletConnected
+          ? ride === ""
+            ? "Pick an option to book ride."
+            : "Book ride."
+          : "Connect wallet to book ride."}
       </button>
     </div>
   );

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import RenderMap from "./RenderMap";
 import Pricing from "./Pricing";
 import axios from "axios";
-import "dotenv";
+import { RideContext } from "../context/RideContext";
 
 function Home() {
+  const { setLoc, setDest, loc, dest } = useContext(RideContext);
   const fetchCoordinatesAPI =
     "https://nominatim.openstreetmap.org/search?format=json&q=";
 
@@ -21,10 +22,12 @@ function Home() {
 
   async function handleChangeInLocation(e) {
     setLocation(e.target.value);
+    setLoc(e.target.value);
   }
 
   async function handleChangeInDestination(e) {
     setDestination(e.target.value);
+    setDest(e.target.value);
   }
 
   async function getLocationLatLong() {
