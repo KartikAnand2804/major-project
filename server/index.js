@@ -58,6 +58,29 @@ app.post("/book-ride", async (req, res) => {
   }
 });
 
+app.get("/get-rides", async (req, res) => {
+  try {
+    const rides = await Ride.find();
+    res.json(rides);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.post("/update-driver-wallet-id", async (req, res) => {
+  const { id, driverWalletId } = req.body;
+  try {
+    const rideDoc = await Ride.findOneAndUpdate(
+      { _id: id },
+      { driverWalletId: driverWalletId },
+      { new: true }
+    );
+    res.json(rideDoc);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const userDoc = await User.findOne({ email: email });

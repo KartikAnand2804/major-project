@@ -6,6 +6,7 @@ const RidesSchema = new Schema({
   from: { type: String, required: true },
   to: { type: String, required: true },
   riderWalletId: { type: String, required: true },
+  driverWalletId: { type: String },
   price: { type: Number },
 });
 

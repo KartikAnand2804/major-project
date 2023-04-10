@@ -3,8 +3,11 @@ import RenderMap from "./RenderMap";
 import Pricing from "./Pricing";
 import axios from "axios";
 import { RideContext } from "../context/RideContext";
+import { UserContext } from "../context/UserContext";
+import DriverDashboard from "./DriverDashboard";
 
 function Home() {
+  const { userInfo } = useContext(UserContext);
   const { setLoc, setDest, loc, dest } = useContext(RideContext);
   const fetchCoordinatesAPI =
     "https://nominatim.openstreetmap.org/search?format=json&q=";
@@ -57,64 +60,71 @@ function Home() {
     setDistance(distance / 1000);
   }
 
-  return (
-    <div className="flex mt-[80px] grid grid-cols-3 h-full">
-      <div className="border-r-2 w-full p-6">
-        <h1 className="font-black text-2xl mb-6">Where do you want to go.</h1>
-        <div className="mb-6">
-          <label
-            for="base-input"
-            className="block mb-2 text-sm font-medium text-gray-900 text-xl"
-          >
-            From:
-          </label>
-          <input
-            onChange={handleChangeInLocation}
-            placeholder="Enter pickup location"
-            type="text"
-            id="base-input"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+  if (userInfo?.typeOfUser === "rider") {
+    return (
+      <div className="flex mt-[80px] grid grid-cols-3 h-full">
+        <div className="border-r-2 w-full p-6">
+          <h1 className="font-black text-2xl mb-6">Where do you want to go.</h1>
+          <div className="mb-6">
+            <label
+              for="base-input"
+              className="block mb-2 text-sm font-medium text-gray-900 text-xl"
+            >
+              From:
+            </label>
+            <input
+              onChange={handleChangeInLocation}
+              placeholder="Enter pickup location"
+              type="text"
+              id="base-input"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+            />
+          </div>
+
+          <div className="mb-6">
+            <label
+              for="base-input"
+              className="block mb-2 text-sm font-medium text-gray-900 text-xl"
+            >
+              To:
+            </label>
+            <input
+              onChange={handleChangeInDestination}
+              placeholder="Enter drop location"
+              type="text"
+              id="base-input"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+            />
+          </div>
+
+          <div className="mb-6">
+            <button
+              className="w-full p-4 border bg-black text-white rounded-xl"
+              onClick={handleClick}
+            >
+              Check.
+            </button>
+          </div>
+        </div>
+        <div className="border-r-2 w-full">
+          <RenderMap
+            lat={locationLat}
+            lon={locationLon}
+            destLat={destinationLat}
+            destLon={destinationLon}
           />
         </div>
-
-        <div className="mb-6">
-          <label
-            for="base-input"
-            className="block mb-2 text-sm font-medium text-gray-900 text-xl"
-          >
-            To:
-          </label>
-          <input
-            onChange={handleChangeInDestination}
-            placeholder="Enter drop location"
-            type="text"
-            id="base-input"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-          />
-        </div>
-
-        <div className="mb-6">
-          <button
-            className="w-full p-4 border bg-black text-white rounded-xl"
-            onClick={handleClick}
-          >
-            Check.
-          </button>
+        <div className="w-full">
+          <Pricing distance={distance} />
         </div>
       </div>
-      <div className="border-r-2 w-full">
-        <RenderMap
-          lat={locationLat}
-          lon={locationLon}
-          destLat={destinationLat}
-          destLon={destinationLon}
-        />
-      </div>
-      <div className="w-full">
-        <Pricing distance={distance} />
-      </div>
-    </div>
-  );
+    );
+  }
+  if (userInfo?.typeOfUser === "driver") {
+    return <DriverDashboard />;
+  } else {
+    return "Login First.";
+  }
 }
 
 export default Home;
