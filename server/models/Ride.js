@@ -8,6 +8,7 @@ const RidesSchema = new Schema({
   riderWalletId: { type: String, required: true },
   driverWalletId: { type: String },
   price: { type: Number },
+  status: { type: String },
 });
 
 const ridesModel = model("Rides", RidesSchema);

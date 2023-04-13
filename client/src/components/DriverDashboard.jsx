@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { WalletContext } from "../context/WalletContext";
+import { RideContext } from "../context/RideContext";
 
 function DriverDashboard() {
   const { walletConnected, walletId } = useContext(WalletContext);
   const [driverLocationCoords, setDriverLocationCoords] = useState([]);
   const [driverLocationName, setDriverLocationName] = useState("");
   const [allRides, setAllRides] = useState(null);
-  const [acceptedRideId, setAcceptedRideId] = useState("");
-  const [isRideAccepted, setIsRideAccepted] = useState(false);
+  const { acceptedRideId, setAcceptedRideId, rideInfo, setRideInfo } =
+    useContext(RideContext);
   const eth_logo = "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=024";
 
   const testLocation = [28.461, 77.4969];
@@ -29,17 +30,22 @@ function DriverDashboard() {
   }, []);
 
   async function acceptRide() {
-    console.log(acceptedRideId);
     const response = await axios.post(
       "http://localhost:5000/update-driver-wallet-id",
       { id: acceptedRideId, driverWalletId: walletId }
     );
-    const data = response.data;
-    if (data) setIsRideAccepted(true);
+    console.log(response.data);
+    setRideInfo(response.data);
   }
 
-  function completeTrip() {
-    setIsRideAccepted(false);
+  async function completeTrip() {
+    const response = await axios.post("http://localhost:5000/complete-ride", {
+      id: acceptedRideId,
+      status: "completed",
+    });
+    console.log(response.data);
+    setRideInfo(response.data);
+    window.location.reload(false);
   }
 
   //   async function getLocationOfDriver() {
@@ -51,13 +57,13 @@ function DriverDashboard() {
 
   return (
     <div className="mt-16 justify-center item-center p-12 w-full h-full">
-      <div className="border rounded-xl h-96 w-96 p-8 bg-black text-white w-max">
+      <div className="border rounded-xl h-96 p-8 bg-black text-white w-[900px]">
         <h1 className="font-sans text-2xl mb-4"> Dashboard </h1>
         <div className="border-b-2 border-slate-600 mb-4"></div>
         <div>
           {/* <button onClick={getLocationOfDriver}> Click </button> */}
         </div>
-        {!isRideAccepted ? (
+        {rideInfo?.status == "completed" || !rideInfo ? (
           <div>
             {allRides?.map((ride) => {
               return (
@@ -84,9 +90,7 @@ function DriverDashboard() {
                       }}
                     >
                       {walletConnected
-                        ? isRideAccepted
-                          ? "Accepted"
-                          : "Accept"
+                        ? "Accept"
                         : "Please connect wallet to accept ride."}
                     </button>
                   </div>
@@ -96,12 +100,16 @@ function DriverDashboard() {
           </div>
         ) : (
           <div>
-            <button
-              className="rounded-xl border px-4 py-1 hover:bg-white hover:text-black"
-              onClick={completeTrip}
-            >
-              Complete trip.
-            </button>
+            <div>
+              <button
+                className="rounded-xl border px-4 py-1 hover:bg-white hover:text-black"
+                onClick={completeTrip}
+              >
+                Complete trip.
+              </button>
+            </div>
+
+            <div>{acceptedRideId}</div>
           </div>
         )}
       </div>

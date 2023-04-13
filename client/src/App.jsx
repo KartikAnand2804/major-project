@@ -10,8 +10,8 @@ import RideContextProvider from "./context/RideContext";
 function App() {
   return (
     <UserContextProvider>
-      <WalletContextProvider>
-        <RideContextProvider>
+      <RideContextProvider>
+        <WalletContextProvider>
           <BrowserRouter>
             <Header />
             <Routes>
@@ -20,8 +20,8 @@ function App() {
               <Route path="/register" element={<Register />} />
             </Routes>
           </BrowserRouter>
-        </RideContextProvider>
-      </WalletContextProvider>
+        </WalletContextProvider>
+      </RideContextProvider>
     </UserContextProvider>
   );
 }

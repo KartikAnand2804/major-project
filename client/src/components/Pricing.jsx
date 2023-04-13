@@ -32,7 +32,8 @@ function Pricing(props) {
     },
   };
 
-  const { loc, dest } = useContext(RideContext);
+  const { loc, dest, acceptedRideId, setAcceptedRideId } =
+    useContext(RideContext);
   const rideData = {
     tier: ride,
     from: loc,
@@ -47,7 +48,11 @@ function Pricing(props) {
       rideData
     );
     const data = response.data;
-    console.log(data);
+    console.log(data._id);
+    setAcceptedRideId(data._id);
+    alert(
+      `Ride booked! Waiting for a driver to accept your ride. You ride ID is ${acceptedRideId}`
+    );
   }
   return (
     <div className="p-6">

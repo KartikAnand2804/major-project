@@ -60,10 +60,20 @@ app.post("/book-ride", async (req, res) => {
 
 app.get("/get-rides", async (req, res) => {
   try {
-    const rides = await Ride.find();
+    const rides = await Ride.find({ status: null });
     res.json(rides);
   } catch (error) {
     console.log(error);
+  }
+});
+
+app.post("/get-ride-details", async (req, res) => {
+  const { id } = req.body;
+  try {
+    const rideDoc = await Ride.findOne({ _id: id });
+    res.json(rideDoc);
+  } catch (error) {
+    res.json(error);
   }
 });
 
@@ -78,6 +88,20 @@ app.post("/update-driver-wallet-id", async (req, res) => {
     res.json(rideDoc);
   } catch (error) {
     console.log(error);
+  }
+});
+
+app.post("/complete-ride", async (req, res) => {
+  const { id, status } = req.body;
+  try {
+    const rideDoc = await Ride.findOneAndUpdate(
+      { _id: id },
+      { status: status },
+      { new: true }
+    );
+    res.json(rideDoc);
+  } catch (error) {
+    res.json(error);
   }
 });
 
