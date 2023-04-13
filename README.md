@@ -19,7 +19,7 @@
 
 4. To add this ganache test wallet to your Metamask, follow the steps on this [link](https://www.geeksforgeeks.org/how-to-set-up-ganche-with-metamask/)
 
-# Getting access token from the distance matrix API.
+## Getting access token from the distance matrix API.
 
 [Distance matrix API](https://distancematrix.ai/distance-matrix-api) has been used in this project to calculate the distance between two coordinates. Register on the website using your student email to get your **_access token_**.
 
