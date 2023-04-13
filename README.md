@@ -9,13 +9,14 @@
 3. cd into the project folder using the `cd ..` command.
 4. Now, cd into the server folder using the `cd server` command and run the `npm install` command.
 
-# Setting up the project
-
 ## Setting up Ganache for running an Ethereum blockchain locally
 
 1. Install [Ganache](https://trufflesuite.com/ganache/)
 2. Upon running Ganache click on the `Quick start` option that the window prompts you with.
-3. The screen would look something like this. ![alt text](https://trufflesuite.com/img/ganache-window.png)
+3. The screen would look something like this.
+
+![alt text](https://trufflesuite.com/img/ganache-window.png)
+
 4. To add this ganache test wallet to your Metamask, follow the steps on this [link](https://www.geeksforgeeks.org/how-to-set-up-ganche-with-metamask/)
 
 # Getting access token from the distance matrix API.
