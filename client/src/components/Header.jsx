@@ -37,7 +37,6 @@ function Header() {
   const [walletConnectError, setWalletConnectError] = useState("");
 
   function connectWallet() {
-    console.log("button clicked");
     if (window.ethereum) {
       window.ethereum
         .request({ method: "eth_requestAccounts" })

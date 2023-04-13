@@ -50,11 +50,11 @@ function RiderDashboard() {
     setDestinationLon(Number(data.lon));
   }
 
-  async function handleClick() {
+  async function getDistance() {
     getLocationLatLong();
     getDestinationLatLong();
 
-    const accessToken = "l6llyyn9fX4JZJ4cEMsdkFKEv6mbf";
+    const accessToken = import.meta.env.VITE_DISTANCE_MATRIX_ACCESS_TOKEN;
     const response = await axios.get(
       `https://api.distancematrix.ai/maps/api/distancematrix/json?origins=${location}&destinations=${destination}&key=${accessToken}`
     );
@@ -154,7 +154,7 @@ function RiderDashboard() {
           <div className="mb-6">
             <button
               className="w-full p-4 border bg-black text-white rounded-xl"
-              onClick={handleClick}
+              onClick={getDistance}
             >
               Check.
             </button>

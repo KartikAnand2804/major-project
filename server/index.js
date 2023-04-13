@@ -16,10 +16,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 const port = 5000;
+const mongooseConnectionString =
+  "mongodb+srv://kartikanand:Dr%40gonball2821@cluster0.paoeug0.mongodb.net/?retryWrites=true&w=majority";
 
-mongoose.connect(
-  "mongodb+srv://kartikanand:Dr%40gonball2821@cluster0.paoeug0.mongodb.net/?retryWrites=true&w=majority"
-);
+mongoose.connect(mongooseConnectionString);
 
 app.post("/register", async (req, res) => {
   const { email, password, firstName, lastName, phoneNumber, typeOfUser } =
