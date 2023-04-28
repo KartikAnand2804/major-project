@@ -32,8 +32,14 @@ function Pricing(props) {
     },
   };
 
-  const { loc, dest, acceptedRideId, setAcceptedRideId } =
-    useContext(RideContext);
+  const {
+    loc,
+    dest,
+    acceptedRideId,
+    setAcceptedRideId,
+    driverCardVisibility,
+    setDriverCardVisibility,
+  } = useContext(RideContext);
   const rideData = {
     tier: ride,
     from: loc,
@@ -51,12 +57,17 @@ function Pricing(props) {
     console.log(data._id);
     setAcceptedRideId(data._id);
     alert(
-      `Ride booked! Waiting for a driver to accept your ride. You ride ID is ${acceptedRideId}`
+      `Ride booked! Waiting for a driver to accept your ride. You ride ID is ${data._id}`
     );
+    setDriverCardVisibility(true);
   }
   return (
     <div className="p-6">
       <h1 className="text-2xl text-center font-bold">Pick your ride.</h1>
+      <h1 className="text-2xl text-center font-bold text-gray-600">
+        {distance} km.
+      </h1>
+
       <div className="mt-6">
         <button
           className="flex border hover:border-black focus:border-black focus:bg-black focus:text-white p-4 mb-3 w-full"

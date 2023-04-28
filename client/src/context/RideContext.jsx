@@ -7,6 +7,8 @@ export default function RideContextProvider({ children }) {
   const [dest, setDest] = useState("");
   const [acceptedRideId, setAcceptedRideId] = useState("");
   const [rideInfo, setRideInfo] = useState(null);
+  const [driverCardVisibility, setDriverCardVisibility] = useState(false);
+  const [isPaymentComplete, setIsPaymentComplete] = useState(false);
 
   return (
     <RideContext.Provider
@@ -19,6 +21,10 @@ export default function RideContextProvider({ children }) {
         setAcceptedRideId,
         rideInfo,
         setRideInfo,
+        driverCardVisibility,
+        setDriverCardVisibility,
+        isPaymentComplete,
+        setIsPaymentComplete,
       }}
     >
       {children}

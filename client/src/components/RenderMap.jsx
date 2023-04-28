@@ -1,5 +1,6 @@
 import React from "react";
 import { MapContainer, TileLayer, useMap, Marker, Popup } from "react-leaflet";
+import L from "leaflet";
 
 export default function RenderMap(props) {
   const locationCoordinates = [
@@ -11,12 +12,22 @@ export default function RenderMap(props) {
     props.destLon ? props.destLon : 77.5431,
   ];
 
+  const locationMarker = new L.icon({
+    iconUrl: "https://www.svgrepo.com/show/513450/location-pin.svg",
+    iconSize: [70, 50],
+  });
+
+  const destinationMarker = new L.icon({
+    iconUrl: "https://www.svgrepo.com/show/292182/pointer-pin.svg",
+    iconSize: [70, 50],
+  });
+
   return (
     <div className="h-full w-full">
       <MapContainer
         className="h-[700px]"
         center={locationCoordinates}
-        zoom={9}
+        zoom={10}
         scrollWheelZoom={true}
         bounds={(locationCoordinates, destinationCoordinates)}
       >
@@ -24,11 +35,11 @@ export default function RenderMap(props) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={locationCoordinates}>
+        <Marker position={locationCoordinates} icon={locationMarker}>
           <Popup>You are here.</Popup>
         </Marker>
 
-        <Marker position={destinationCoordinates}>
+        <Marker position={destinationCoordinates} icon={destinationMarker}>
           <Popup>Here's where you want to go.</Popup>
         </Marker>
       </MapContainer>
