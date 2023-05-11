@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { WalletContext } from "../context/WalletContext";
 import { RideContext } from "../context/RideContext";
+import RiderCard from "./RiderCard";
 
 function DriverDashboard() {
   const { walletConnected, walletId } = useContext(WalletContext);
@@ -57,7 +58,7 @@ function DriverDashboard() {
 
   return (
     <div className="mt-16 justify-center item-center p-12 w-full h-full">
-      <div className="border rounded-xl h-96 p-8 bg-black text-white w-[900px]">
+      <div className="border rounded-xl h-content p-8 bg-black text-white w-[900px]">
         <h1 className="font-sans text-2xl mb-4"> Dashboard </h1>
         <div className="border-b-2 border-slate-600 mb-4"></div>
         <div>
@@ -101,15 +102,14 @@ function DriverDashboard() {
         ) : (
           <div>
             <div>
+              <RiderCard rideInfo={rideInfo} />
               <button
-                className="rounded-xl border px-4 py-1 hover:bg-white hover:text-black"
+                className="rounded-xl text-2xl font-bold border-2 px-4 py-1 hover:bg-white hover:text-black"
                 onClick={completeTrip}
               >
                 Complete trip.
               </button>
             </div>
-
-            <div>{acceptedRideId}</div>
           </div>
         )}
       </div>
