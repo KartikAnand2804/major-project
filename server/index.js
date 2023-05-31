@@ -22,8 +22,15 @@ const mongooseConnectionString =
 mongoose.connect(mongooseConnectionString);
 
 app.post("/register", async (req, res) => {
-  const { email, password, firstName, lastName, phoneNumber, typeOfUser } =
-    req.body;
+  const {
+    email,
+    password,
+    firstName,
+    lastName,
+    phoneNumber,
+    carNumber,
+    typeOfUser,
+  } = req.body;
   try {
     const userDoc = await User.create({
       email,
@@ -31,6 +38,7 @@ app.post("/register", async (req, res) => {
       lastName,
       phoneNumber,
       typeOfUser,
+      carNumber,
       password: bcrypt.hashSync(password, salt),
     });
     console.log(userDoc);
@@ -42,13 +50,14 @@ app.post("/register", async (req, res) => {
 });
 
 app.post("/book-ride", async (req, res) => {
-  const { price, tier, from, to, riderWalletId } = req.body;
+  const { price, tier, from, to, riderWalletId, riderName } = req.body;
   try {
     const rideDoc = await Ride.create({
       from,
       to,
       price,
       riderWalletId,
+      riderName,
       tier,
     });
     res.json(rideDoc);
@@ -78,11 +87,15 @@ app.post("/get-ride-details", async (req, res) => {
 });
 
 app.post("/update-driver-wallet-id", async (req, res) => {
-  const { id, driverWalletId } = req.body;
+  const { id, driverWalletId, driverName, carNumber } = req.body;
   try {
     const rideDoc = await Ride.findOneAndUpdate(
       { _id: id },
-      { driverWalletId: driverWalletId },
+      {
+        driverWalletId: driverWalletId,
+        driverName: driverName,
+        carNumber: carNumber,
+      },
       { new: true }
     );
     res.json(rideDoc);
@@ -112,23 +125,45 @@ app.post("/login", async (req, res) => {
   const passOk = bcrypt.compareSync(password, userDoc.password);
   if (passOk) {
     // logged in
-    jwt.sign(
-      {
-        id: userDoc._id,
-        firstName: userDoc.firstName,
-        typeOfUser: userDoc.typeOfUser,
-      },
-      secret,
-      {},
-      (err, token) => {
-        if (err) throw err;
-        res.cookie("token", token, { sameSite: "none", secure: true }).json({
+    if (userDoc.typeOfUser === "rider") {
+      jwt.sign(
+        {
           id: userDoc._id,
           firstName: userDoc.firstName,
           typeOfUser: userDoc.typeOfUser,
-        });
-      }
-    );
+        },
+        secret,
+        {},
+        (err, token) => {
+          if (err) throw err;
+          res.cookie("token", token, { sameSite: "none", secure: true }).json({
+            id: userDoc._id,
+            firstName: userDoc.firstName,
+            typeOfUser: userDoc.typeOfUser,
+          });
+        }
+      );
+    } else {
+      jwt.sign(
+        {
+          id: userDoc._id,
+          firstName: userDoc.firstName,
+          typeOfUser: userDoc.typeOfUser,
+          carNumber: userDoc.carNumber,
+        },
+        secret,
+        {},
+        (err, token) => {
+          if (err) throw err;
+          res.cookie("token", token, { sameSite: "none", secure: true }).json({
+            id: userDoc._id,
+            firstName: userDoc.firstName,
+            typeOfUser: userDoc.typeOfUser,
+            carNumber: userDoc.carNumber,
+          });
+        }
+      );
+    }
   } else {
     res.status(400).json("Invalid Credentials.");
   }

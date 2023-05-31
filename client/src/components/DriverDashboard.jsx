@@ -3,9 +3,11 @@ import axios from "axios";
 import { WalletContext } from "../context/WalletContext";
 import { RideContext } from "../context/RideContext";
 import RiderCard from "./RiderCard";
+import { UserContext } from "../context/UserContext";
 
 function DriverDashboard() {
   const { walletConnected, walletId } = useContext(WalletContext);
+  const { userInfo } = useContext(UserContext);
   const [driverLocationCoords, setDriverLocationCoords] = useState([]);
   const [driverLocationName, setDriverLocationName] = useState("");
   const [allRides, setAllRides] = useState(null);
@@ -14,6 +16,8 @@ function DriverDashboard() {
   const eth_logo = "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=024";
 
   const testLocation = [28.461, 77.4969];
+
+  console.log(userInfo.firstName);
 
   //   useEffect(() => {
   //     navigator.geolocation.getCurrentPosition((position) => {
@@ -33,7 +37,12 @@ function DriverDashboard() {
   async function acceptRide() {
     const response = await axios.post(
       "http://localhost:5000/update-driver-wallet-id",
-      { id: acceptedRideId, driverWalletId: walletId }
+      {
+        id: acceptedRideId,
+        driverWalletId: walletId,
+        driverName: userInfo.firstName,
+        carNumber: userInfo.carNumber,
+      }
     );
     console.log(response.data);
     setRideInfo(response.data);

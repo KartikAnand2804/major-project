@@ -98,6 +98,8 @@ function RiderDashboard() {
     setPrice(response.data.price);
     setStatus(response.data.status);
 
+    console.log(response.data);
+
     console.log(walletId, driverWalletId, price, status);
   }
 

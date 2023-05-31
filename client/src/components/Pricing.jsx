@@ -2,9 +2,11 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import { WalletContext } from "../context/WalletContext";
 import { RideContext } from "../context/RideContext";
+import { UserContext } from "../context/UserContext";
 
 function Pricing(props) {
   const [ride, setRide] = useState("");
+  const { userInfo } = useContext(UserContext);
   const distance = props.distance;
   const basePrice = 1572;
   const eth_logo = "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=024";
@@ -45,6 +47,7 @@ function Pricing(props) {
     from: loc,
     to: dest,
     riderWalletId: walletId,
+    riderName: userInfo.firstName,
     price: finalPrice,
   };
 

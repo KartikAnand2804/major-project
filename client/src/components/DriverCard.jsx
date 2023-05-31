@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { RideContext } from "../context/RideContext";
 import axios from "axios";
 
@@ -13,6 +13,21 @@ function DriverCard({ distance }) {
     isPaymentComplete,
     setIsPaymentComplete,
   } = useContext(RideContext);
+
+  const [priceOfRide, setPriceOfRide] = useState(null);
+  const [driverName, setDriverName] = useState(null);
+
+  const [carNumber, setCarNumber] = useState(null);
+
+  useEffect(() => {
+    axios
+      .post("http://localhost:5000/get-ride-details", { id: acceptedRideId })
+      .then((response) => {
+        setPriceOfRide(response.data.price);
+        setCarNumber(response.data.carNumber);
+        setDriverName(response.data.driverName);
+      });
+  }, []);
 
   //   async function checkStatus() {
   //     const response = await axios.post(
@@ -44,16 +59,18 @@ function DriverCard({ distance }) {
         Ride ID: {acceptedRideId}
       </h1>
       <div className="flex gap-4 justify-start mb-4 overflow-hidden">
-        <p className="text-lg font-semibold">Driver Name</p>
+        <p className="text-lg font-semibold">
+          You are riding with <b>{driverName}</b>
+        </p>
         <h1 className="text-xl text-slate-700">
           {/* {rideInfo.driverWalletId
             ? rideInfo.driverWalletId
             : "driver's wallet ID"} */}
-          Driver ID
+          Vehicle Number is {carNumber}
         </h1>
       </div>
       <div className="flex gap-4 justify-start items-center mb-4">
-        <p className="text-xl font-semibold">Price</p>
+        <p className="text-xl font-semibold">{priceOfRide}</p>
         <img className="h-8 w-8" src={eth_logo} alt="eth logo" />
       </div>
 

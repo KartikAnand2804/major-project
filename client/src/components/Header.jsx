@@ -19,6 +19,7 @@ function Header() {
         })
         .then((response) => {
           const userData = response.data;
+          console.log(userData);
           setUserInfo(userData);
         });
     } catch (error) {

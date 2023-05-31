@@ -7,6 +7,7 @@ const UserSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   phoneNumber: { type: String, required: true },
+  carNumber: { type: String },
   typeOfUser: { type: String, required: true },
 });
 
